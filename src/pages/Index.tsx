@@ -881,6 +881,61 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* About Section */}
+      <section id="about" className="bg-black py-20 px-4 sm:px-8 lg:px-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            {/* Photo */}
+            <div className="flex-shrink-0">
+              <div className="relative w-64 h-64 lg:w-80 lg:h-80">
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-500/30 to-orange-600/10 blur-2xl scale-110" />
+                <img
+                  src="https://cdn.poehali.dev/projects/31774b64-8c0a-401c-b217-c65ad6c2f92d/files/6c446a6a-963d-47f2-b895-45d37bf8615a.jpg"
+                  alt="Наталья — дизайнер"
+                  className="relative z-10 w-full h-full object-cover rounded-3xl border border-orange-500/20"
+                />
+              </div>
+            </div>
+
+            {/* Text */}
+            <div className="flex flex-col gap-6 text-center lg:text-left">
+              <div>
+                <p className="text-orange-400 text-sm font-medium uppercase tracking-widest mb-2">Обо мне</p>
+                <h2 className="text-white text-3xl sm:text-4xl font-bold leading-tight">
+                  Привет, я Наталья
+                </h2>
+              </div>
+
+              <p className="text-white/70 text-base leading-relaxed">
+                Дизайн — моя страсть уже <span className="text-orange-400 font-semibold">более 10 лет</span>. Начинала как хобби, но со временем поняла: пора делать это серьёзно. Сегодня я соединяю классическое чувство стиля с возможностями современного ИИ — чтобы создавать контент, который действительно работает для бизнеса.
+              </p>
+
+              <p className="text-white/70 text-base leading-relaxed">
+                Я люблю находить и развивать свежие идеи, слушаю клиентов внимательно и сдаю работу строго в срок. Все нюансы всегда обсуждаем заранее — никаких сюрпризов.
+              </p>
+
+              {/* Values */}
+              <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+                {[
+                  { icon: "Heart", label: "С душой" },
+                  { icon: "Clock", label: "В срок" },
+                  { icon: "Star", label: "На результат" },
+                  { icon: "Lightbulb", label: "Новые идеи" },
+                ].map((v) => (
+                  <div
+                    key={v.label}
+                    className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2"
+                  >
+                    <Icon name={v.icon} size={14} className="text-orange-400" />
+                    <span className="text-white/80 text-sm">{v.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
