@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Menu } from "lucide-react"
 import { LineShadowText } from "@/components/line-shadow-text"
 import { ShimmerButton } from "@/components/shimmer-button"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import Icon from "@/components/ui/icon"
 
 const categories = [
@@ -53,8 +53,33 @@ const categories = [
   },
 ]
 
+const SUBMIT_URL = "https://functions.poehali.dev/81e15f1e-95d0-47b3-90ce-bc5f1e95a0de"
+
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [formData, setFormData] = useState({ name: '', phone: '', service: '', message: '' })
+  const [formState, setFormState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const formRef = useRef<HTMLFormElement>(null)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setFormState('loading')
+    try {
+      const res = await fetch(SUBMIT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      if (res.ok) {
+        setFormState('success')
+        setFormData({ name: '', phone: '', service: '', message: '' })
+      } else {
+        setFormState('error')
+      }
+    } catch {
+      setFormState('error')
+    }
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -934,6 +959,104 @@ export default function Index() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section id="contact" className="bg-black py-20 px-4 sm:px-8 lg:px-20">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-orange-400 text-sm font-medium uppercase tracking-widest mb-2">Связаться</p>
+            <h2 className="text-white text-3xl sm:text-4xl font-bold leading-tight">Оставьте заявку</h2>
+            <p className="text-white/60 mt-3 text-base">Расскажите о задаче — отвечу в течение дня</p>
+          </div>
+
+          {formState === 'success' ? (
+            <div className="rounded-2xl border border-orange-500/30 bg-orange-500/5 p-10 flex flex-col items-center gap-4 text-center">
+              <div className="w-14 h-14 rounded-full bg-orange-500/20 flex items-center justify-center">
+                <Icon name="CheckCircle" size={28} className="text-orange-400" />
+              </div>
+              <h3 className="text-white text-xl font-bold">Заявка отправлена!</h3>
+              <p className="text-white/60">Я свяжусь с вами в ближайшее время.</p>
+              <button
+                onClick={() => setFormState('idle')}
+                className="text-orange-400 text-sm hover:underline"
+              >
+                Отправить ещё раз
+              </button>
+            </div>
+          ) : (
+            <form
+              ref={formRef}
+              onSubmit={handleSubmit}
+              className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 flex flex-col gap-5"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-2">
+                  <label className="text-white/60 text-sm">Ваше имя *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                    placeholder="Наталья"
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-orange-500/50 transition-colors"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-white/60 text-sm">Телефон *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
+                    placeholder="+7 900 000-00-00"
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-orange-500/50 transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-white/60 text-sm">Услуга</label>
+                <select
+                  value={formData.service}
+                  onChange={e => setFormData(p => ({ ...p, service: e.target.value }))}
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 transition-colors appearance-none"
+                >
+                  <option value="" className="bg-black">Выберите услугу</option>
+                  <option value="Маркетплейсы" className="bg-black">Маркетплейсы</option>
+                  <option value="Визитки" className="bg-black">Визитки</option>
+                  <option value="Логотипы" className="bg-black">Логотипы</option>
+                  <option value="Видео" className="bg-black">Видеоролики</option>
+                  <option value="Тексты" className="bg-black">Продающие тексты</option>
+                  <option value="Другое" className="bg-black">Другое</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-white/60 text-sm">Описание задачи</label>
+                <textarea
+                  rows={4}
+                  value={formData.message}
+                  onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
+                  placeholder="Расскажите, что нужно сделать..."
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-orange-500/50 transition-colors resize-none"
+                />
+              </div>
+
+              {formState === 'error' && (
+                <p className="text-red-400 text-sm text-center">Что-то пошло не так. Попробуйте ещё раз.</p>
+              )}
+
+              <ShimmerButton
+                type="submit"
+                disabled={formState === 'loading'}
+                className="bg-orange-500 text-white px-6 py-3 rounded-xl font-medium text-base w-full disabled:opacity-50"
+              >
+                {formState === 'loading' ? 'Отправляем...' : 'Отправить заявку'}
+              </ShimmerButton>
+            </form>
+          )}
         </div>
       </section>
     </div>
