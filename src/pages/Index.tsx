@@ -3,6 +3,55 @@ import { ArrowRight, Menu } from "lucide-react"
 import { LineShadowText } from "@/components/line-shadow-text"
 import { ShimmerButton } from "@/components/shimmer-button"
 import { useState } from "react"
+import Icon from "@/components/ui/icon"
+
+const categories = [
+  {
+    id: "marketplace",
+    icon: "ShoppingBag",
+    label: "Маркетплейсы",
+    description: "Инфографика и карточки товаров для Wildberries, Ozon, СДЭК",
+    color: "from-orange-500/20 to-orange-600/5",
+    border: "border-orange-500/30",
+    items: ["Главное фото", "Инфографика", "Rich-контент", "Баннеры"],
+  },
+  {
+    id: "business-cards",
+    icon: "CreditCard",
+    label: "Визитки",
+    description: "Стильные визитки для бизнеса и личного бренда",
+    color: "from-amber-500/20 to-amber-600/5",
+    border: "border-amber-500/30",
+    items: ["Двусторонние", "Горизонтальные", "Вертикальные", "Премиум"],
+  },
+  {
+    id: "logos",
+    icon: "Sparkles",
+    label: "Логотипы",
+    description: "Уникальные логотипы и фирменный стиль с нуля",
+    color: "from-orange-400/20 to-orange-500/5",
+    border: "border-orange-400/30",
+    items: ["Логотип", "Фирменный стиль", "Иконки", "Брендбук"],
+  },
+  {
+    id: "video",
+    icon: "Play",
+    label: "Видео",
+    description: "Рекламные ролики, рилсы и анимация для соцсетей",
+    color: "from-red-500/20 to-red-600/5",
+    border: "border-red-500/30",
+    items: ["Reels / Shorts", "Реклама", "Анимация", "Монтаж"],
+  },
+  {
+    id: "texts",
+    icon: "PenLine",
+    label: "Тексты",
+    description: "Продающие тексты, описания товаров и посты для соцсетей",
+    color: "from-yellow-500/20 to-yellow-600/5",
+    border: "border-yellow-500/30",
+    items: ["Карточки товаров", "Посты", "Сторис", "Реклама"],
+  },
+]
 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -766,12 +815,72 @@ export default function Index() {
           видеоролики и продающие тексты — всё под ключ.
         </p>
 
-        <Button className="group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base md:text-xs lg:text-lg font-semibold flex items-center gap-2 backdrop-blur-sm border border-orange-400/30 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5">
+        <Button
+          className="group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base md:text-xs lg:text-lg font-semibold flex items-center gap-2 backdrop-blur-sm border border-orange-400/30 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
+          onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
+        >
           Смотреть работы
           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-300" />
           <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Button>
       </main>
+
+      {/* Portfolio Section */}
+      <section id="portfolio" className="relative z-10 bg-black py-20 px-4 sm:px-8 lg:px-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-orange-400 text-sm font-semibold uppercase tracking-widest mb-3">Портфолио</p>
+            <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Что я делаю
+            </h2>
+            <p className="text-white/50 text-base sm:text-lg max-w-xl mx-auto">
+              Пять направлений — один специалист. Выберите нужное и посмотрите примеры работ.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className={`group relative rounded-2xl border ${cat.border} bg-gradient-to-br ${cat.color} backdrop-blur-sm p-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10`}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                    <Icon name={cat.icon} fallback="Star" size={20} className="text-orange-400" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg">{cat.label}</h3>
+                </div>
+                <p className="text-white/60 text-sm mb-5 leading-relaxed">{cat.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {cat.items.map((item) => (
+                    <span
+                      key={item}
+                      className="text-xs text-white/70 bg-white/10 border border-white/10 rounded-full px-3 py-1"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-6 flex items-center gap-1 text-orange-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Заказать <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            ))}
+
+            {/* CTA card */}
+            <div className="relative rounded-2xl border border-orange-500/50 bg-gradient-to-br from-orange-500/25 to-orange-600/10 p-6 flex flex-col items-center justify-center text-center min-h-[200px]">
+              <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mb-4">
+                <Icon name="MessageCircle" size={22} className="text-orange-400" />
+              </div>
+              <h3 className="text-white font-bold text-lg mb-2">Нужно что-то особенное?</h3>
+              <p className="text-white/60 text-sm mb-5">Обсудим ваш проект индивидуально</p>
+              <ShimmerButton className="bg-orange-500 text-white px-5 py-2 rounded-xl text-sm font-medium">
+                Написать
+              </ShimmerButton>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
